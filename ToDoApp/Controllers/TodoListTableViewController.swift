@@ -12,6 +12,8 @@ import ChameleonFramework
 
 class TodoListTableViewController: UITableViewController {
     
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     let realm = try! Realm()
     var todoItems: Results<Item>?
     var selectedCategory : Category? {
@@ -24,6 +26,22 @@ class TodoListTableViewController: UITableViewController {
         super.viewDidLoad()
         tableView.separatorStyle = .none
         tableView.rowHeight = 80
+                
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        
+        title = selectedCategory!.name
+        if let colourHex = selectedCategory?.colour {
+            guard let navBar = navigationController?.navigationBar else {fatalError("Navigation Controller does not exist.") }
+            if let navBarColour = UIColor(hexString: colourHex) {
+                navBar.backgroundColor = navBarColour
+                searchBar.barTintColor = navBarColour
+                searchBar.searchTextField.backgroundColor = .white
+                navBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: ContrastColorOf(navBarColour, returnFlat: true)]
+                navBar.tintColor = ContrastColorOf(navBarColour, returnFlat: true)
+            }
+            
+        }
     }
     
     // MARK: - Table view data source

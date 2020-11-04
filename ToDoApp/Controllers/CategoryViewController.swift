@@ -22,6 +22,12 @@ class CategoryViewController: UITableViewController {
         tableView.rowHeight = 80
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+         guard let navBar = navigationController?.navigationBar else {
+            fatalError("Navigation Controller does not exist.") }
+        navBar.backgroundColor = UIColor(hexString: "1D9BF6")
+        
+    }
     //MARK: - Add New Category
     
     @IBAction func AddBarButton(_ sender: UIBarButtonItem) {
@@ -69,6 +75,10 @@ class CategoryViewController: UITableViewController {
         cell.textLabel?.text = categoryArray?[indexPath.row].name ?? "No Categories Added yet"
         
         cell.backgroundColor = UIColor(hexString: categoryArray?[indexPath.row].colour ?? "1D9BF6")
+        
+        guard let categoryColour = UIColor(hexString: (categoryArray?[indexPath.row].colour)!) else { fatalError() }
+        //fix next row
+        cell.textLabel?.textColor = ContrastColorOf(categoryColour, returnFlat: true)
         
         return cell
     }
