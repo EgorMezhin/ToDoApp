@@ -25,12 +25,19 @@ class TodoListTableViewController: UITableViewController {
     
     // MARK: - Table view data source
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView,
+                            numberOfRowsInSection section: Int)
+                            -> Int
+    {
         return todoItems?.count ?? 1
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
+    override func tableView(_ tableView: UITableView,
+                            cellForRowAt indexPath: IndexPath)
+                            -> UITableViewCell
+    {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell",
+                                                 for: indexPath)
         
         if let item = todoItems?[indexPath.row] {
             cell.textLabel?.text = item.title
@@ -43,7 +50,9 @@ class TodoListTableViewController: UITableViewController {
     
     //MARK: - TableView Delegate Methods
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView,
+                            didSelectRowAt indexPath: IndexPath)
+    {
         if let item = todoItems?[indexPath.row] {
             do {
                 try realm.write {
@@ -62,7 +71,9 @@ class TodoListTableViewController: UITableViewController {
     @IBAction func addBarButton(_ sender: UIBarButtonItem) {
         
         var textField = UITextField()
-        let alert = UIAlertController(title: "Add New ToDo Item ", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add New ToDo Item ",
+                                      message: "",
+                                      preferredStyle: .alert)
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             
             if let currentCategory = self.selectedCategory {
@@ -92,18 +103,24 @@ class TodoListTableViewController: UITableViewController {
     }
     
     func loadItems() {
-        todoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
+        todoItems = selectedCategory?.items.sorted(byKeyPath: "title",
+                                                   ascending: true)
         tableView.reloadData()
     }
     
     //MARK: - Delete Items
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool
+    func tableView(tableView: UITableView,
+                   canEditRowAtIndexPath indexPath: NSIndexPath)
+                   -> Bool
     {
         return true
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView,
+                            commit editingStyle: UITableViewCell.EditingStyle,
+                            forRowAt indexPath: IndexPath)
+    {
         if editingStyle == .delete {
             if let item = todoItems?[indexPath.row] {
                 do {
@@ -124,7 +141,9 @@ class TodoListTableViewController: UITableViewController {
 extension TodoListTableViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        todoItems = todoItems?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
+        todoItems = todoItems?.filter("title CONTAINS[cd] %@",
+                                      searchBar.text!).sorted(byKeyPath: "dateCreated",
+                                                              ascending: true)
         tableView.reloadData()
     }
     

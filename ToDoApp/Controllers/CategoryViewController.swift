@@ -22,13 +22,17 @@ class CategoryViewController: UITableViewController {
     //MARK: - Add New Category
     
     @IBAction func AddBarButton(_ sender: UIBarButtonItem) {
-        
         var textField = UITextField()
-        let alert = UIAlertController(title: "Add New ToDo Category ", message: "",
+        let alert = UIAlertController(title: "Add New ToDo Category ",
+                                      message: "",
                                       preferredStyle: .alert)
-        let action = UIAlertAction(title: "Add", style: .default) { (action) in
+        
+        let action = UIAlertAction(title: "Add",
+                                   style: .default)
+        { (action) in
             guard let categoryText = textField.text else { return }
             let newCategory = Category()
+            
             newCategory.name = categoryText
             self.save(category: newCategory)
         }
@@ -43,12 +47,17 @@ class CategoryViewController: UITableViewController {
     
     //MARK: - TableView DataSource Methods
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView,
+                            numberOfRowsInSection section: Int)
+                            -> Int
+    {
         return categoryArray?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView,
-                            cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+                            cellForRowAt indexPath: IndexPath)
+                            -> UITableViewCell
+    {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell",
                                                  for: indexPath)
         
@@ -58,11 +67,14 @@ class CategoryViewController: UITableViewController {
     
     //MARK: - TableView Delegate Methods
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView,
+                            didSelectRowAt indexPath: IndexPath)
+    {
         performSegue(withIdentifier: "goToItems", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         let destinationVC = segue.destination as! TodoListTableViewController
         
         if let indexPath = tableView.indexPathForSelectedRow {
