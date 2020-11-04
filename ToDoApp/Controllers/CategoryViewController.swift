@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class CategoryViewController: UITableViewController {
     
@@ -17,6 +18,8 @@ class CategoryViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCategories()
+        tableView.separatorStyle = .none
+        tableView.rowHeight = 80
     }
     
     //MARK: - Add New Category
@@ -34,6 +37,8 @@ class CategoryViewController: UITableViewController {
             let newCategory = Category()
             
             newCategory.name = categoryText
+            newCategory.colour = UIColor.randomFlat().hexValue()
+            
             self.save(category: newCategory)
         }
         
@@ -62,6 +67,9 @@ class CategoryViewController: UITableViewController {
                                                  for: indexPath)
         
         cell.textLabel?.text = categoryArray?[indexPath.row].name ?? "No Categories Added yet"
+        
+        cell.backgroundColor = UIColor(hexString: categoryArray?[indexPath.row].colour ?? "1D9BF6")
+        
         return cell
     }
     
@@ -80,6 +88,33 @@ class CategoryViewController: UITableViewController {
         if let indexPath = tableView.indexPathForSelectedRow {
             destinationVC.selectedCategory = categoryArray?[indexPath.row] 
         }
+    }
+    
+    //MARK: - Delete Items
+    
+    func tableView(tableView: UITableView,
+                   canEditRowAtIndexPath indexPath: NSIndexPath)
+                   -> Bool
+    {
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView,
+                            commit editingStyle: UITableViewCell.EditingStyle,
+                            forRowAt indexPath: IndexPath)
+    {
+        if editingStyle == .delete {
+            if let item = categoryArray?[indexPath.row] {
+                do {
+                    try realm.write {
+                        realm.delete(item)
+                    }
+                } catch {
+                    print("Error with deletion, \(error)")
+                }
+            }
+        }
+        tableView.reloadData()
     }
     
     //MARK: - Data Manipulation Methods
