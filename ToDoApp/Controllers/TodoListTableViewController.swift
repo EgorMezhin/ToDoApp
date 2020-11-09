@@ -28,8 +28,8 @@ class TodoListTableViewController: UITableViewController {
         tableView.rowHeight = 80
                 
     }
+    
     override func viewWillAppear(_ animated: Bool) {
-        
         title = selectedCategory!.name
         if let colourHex = selectedCategory?.colour {
             guard let navBar = navigationController?.navigationBar else {fatalError("Navigation Controller does not exist.") }
